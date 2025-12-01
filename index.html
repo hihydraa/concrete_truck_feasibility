@@ -60,14 +60,27 @@
             -webkit-text-fill-color: transparent;
         }
     </style>
+
+    <!-- PDF Export Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
 </head>
-<body>
+<body id="report-root">
 
     <!-- Header & Executive Summary -->
-    <header class="bg-blue-900 text-white p-8 md:p-12 shadow-2xl sticky top-0 z-50">
+    <header class="bg-blue-900 text-white p-8 md:p-12 shadow-2xl sticky top-0 z-40">
         <h1 class="text-3xl md:text-4xl font-extrabold mb-2">รายงานวิเคราะห์การลงทุน: รถโม่ปูนใหม่ 1 คัน</h1>
         <p class="text-lg opacity-80">เปรียบเทียบต้นทุนรวมต่อปี (TCO) สำหรับปริมาณงาน 3,852.67 คิว (ต่อคัน)</p>
     </header>
+
+    <!-- Export PDF Floating Button (จะไม่ถูกแคปลง PDF) -->
+    <button
+        data-html2canvas-ignore="true"
+        onclick="exportPDF()"
+        class="fixed bottom-4 right-4 z-50 px-4 py-2 rounded-full shadow-lg bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold flex items-center gap-2"
+    >
+        📄 ดาวน์โหลดเป็น PDF
+    </button>
 
     <main class="max-w-7xl mx-auto px-4 py-8">
 
@@ -78,7 +91,7 @@
                 <div class="flex flex-col md:flex-row items-center justify-between">
                     <div class="mb-4 md:mb-0">
                         <h3 class="text-4xl font-extrabold text-emerald-600 mb-2">รถ 6 ล้อ คุ้มค่าที่สุด</h3>
-                        <p class="text-xl text-gray-700">แนะนำให้จัดซื้อ **รถ 6 ล้อ** และบริหารจัดการให้บรรทุก **4 คิว/เที่ยว**</p>
+                        <p class="text-xl text-gray-700">แนะนำให้จัดซื้อ <strong>รถ 6 ล้อ</strong> และบริหารจัดการให้บรรทุก <strong>4 คิว/เที่ยว</strong></p>
                     </div>
                     <div class="text-center bg-emerald-50 rounded-xl p-4 shadow-md">
                         <p class="text-gray-600 text-sm mb-1">ส่วนต่างประหยัดต้นทุนรวม (เทียบกับ 10 ล้อ)</p>
@@ -327,7 +340,6 @@
                         label += ': ';
                     }
                     if (context.parsed.y !== null) {
-                        // Format large numbers to use 'M' for millions
                         let value = context.parsed.y;
                         if (value >= 1000000) {
                              label += (value / 1000000).toFixed(2) + ' ลบ.';
@@ -476,6 +488,50 @@
             }
         });
 
+        // --- 4. Export PDF Function ---
+        async function exportPDF() {
+            const { jsPDF } = window.jspdf || window.jspdf || {};
+            if (!jsPDF) {
+                alert('ไม่สามารถโหลด jsPDF ได้ กรุณาเชื่อมต่ออินเทอร์เน็ตแล้วลองใหม่อีกครั้ง');
+                return;
+            }
+
+            const reportElement = document.getElementById('report-root');
+
+            // เลื่อนหน้าไปบนสุดก่อนกัน chart/canvas เบี้ยว
+            window.scrollTo(0, 0);
+
+            const canvas = await html2canvas(reportElement, {
+                scale: 2,
+                useCORS: true,
+                windowWidth: document.documentElement.scrollWidth,
+                windowHeight: document.documentElement.scrollHeight
+            });
+
+            const imgData = canvas.toDataURL('image/png');
+            const pdf = new jsPDF('p', 'mm', 'a4');
+
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = pdf.internal.pageSize.getHeight();
+
+            const imgWidth = pdfWidth;
+            const imgHeight = canvas.height * pdfWidth / canvas.width;
+
+            let heightLeft = imgHeight;
+            let position = 0;
+
+            pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+            heightLeft -= pdfHeight;
+
+            while (heightLeft > 0) {
+                position = heightLeft - imgHeight;
+                pdf.addPage();
+                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                heightLeft -= pdfHeight;
+            }
+
+            pdf.save('truck-mixer-investment-report.pdf');
+        }
     </script>
     <!-- NO SVG Graphics used. NO Mermaid JS used. -->
 </body>
