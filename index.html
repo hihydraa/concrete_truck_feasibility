@@ -8,13 +8,6 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;800&display=swap" rel="stylesheet">
     
-    <!-- Chosen Palette: "Vibrant Professional" (Professional, high-contrast palette)
-         Primary Blue (Header/Data): #1E3A8A (blue-900)
-         Winner Green (Highlight): #10B981 (emerald-500)
-         Accent Yellow (Fuel): #F59E0B (amber-500)
-         Accent Purple (Maintenance/Maint): #8B5CF6 (violet-500)
-    -->
-
     <style>
         body {
             font-family: 'Sarabun', sans-serif;
@@ -65,15 +58,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
 </head>
-<body id="report-root">
+<body>
 
-    <!-- Header & Executive Summary -->
-    <header class="bg-blue-900 text-white p-8 md:p-12 shadow-2xl sticky top-0 z-40">
-        <h1 class="text-3xl md:text-4xl font-extrabold mb-2">รายงานวิเคราะห์การลงทุน: รถโม่ปูนใหม่ 1 คัน</h1>
-        <p class="text-lg opacity-80">เปรียบเทียบต้นทุนรวมต่อปี (TCO) สำหรับปริมาณงาน 3,852.67 คิว (ต่อคัน)</p>
-    </header>
-
-    <!-- Export PDF Floating Button (จะไม่ถูกแคปลง PDF) -->
+    <!-- ปุ่ม Export PDF (ไม่ถูกแคปลง PDF) -->
     <button
         data-html2canvas-ignore="true"
         onclick="exportPDF()"
@@ -84,277 +71,304 @@
 
     <main class="max-w-7xl mx-auto px-4 py-8">
 
-        <!-- Executive Verdict -->
-        <section class="mb-8">
-            <div class="card border-l-8 border-emerald-500 p-6 md:p-8">
-                <h2 class="text-2xl font-bold text-gray-700 uppercase tracking-wider mb-3">สรุปผลการตัดสินใจ (Executive Verdict)</h2>
-                <div class="flex flex-col md:flex-row items-center justify-between">
-                    <div class="mb-4 md:mb-0">
-                        <h3 class="text-4xl font-extrabold text-emerald-600 mb-2">รถ 6 ล้อ คุ้มค่าที่สุด</h3>
-                        <p class="text-xl text-gray-700">แนะนำให้จัดซื้อ <strong>รถ 6 ล้อ</strong> และบริหารจัดการให้บรรทุก <strong>4 คิว/เที่ยว</strong></p>
-                    </div>
-                    <div class="text-center bg-emerald-50 rounded-xl p-4 shadow-md">
-                        <p class="text-gray-600 text-sm mb-1">ส่วนต่างประหยัดต้นทุนรวม (เทียบกับ 10 ล้อ)</p>
-                        <p class="text-4xl font-extrabold text-emerald-600">1.73 ลบ.</p>
-                        <p class="text-gray-500 text-sm mt-1">ต่อปี</p>
-                    </div>
-                </div>
-            </div>
-        </section>
+        <!-- ============ PAGE 1 ============ -->
+        <div id="pdf-page-1">
 
-        <!-- Financial Analysis Section -->
-        <section class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            <div class="col-span-1 md:col-span-2">
-                <h2 class="text-2xl font-bold text-blue-900 mb-4 border-b pb-2">1. การวิเคราะห์ต้นทุนรวมต่อปี (TCO)</h2>
-                <p class="text-gray-700">การวิเคราะห์นี้แสดงให้เห็นว่าต้นทุนเริ่มต้นที่ต่ำกว่าของรถ 6 ล้อ สามารถหักล้างต้นทุนน้ำมันเชื้อเพลิงและค่าบำรุงรักษาที่เพิ่มขึ้นจากการวิ่งเที่ยวที่มากกว่าได้อย่างสมบูรณ์</p>
-            </div>
-            
-            <!-- Chart 1: TCO Comparison -->
-            <div class="card">
-                <h3 class="text-xl font-semibold mb-4">1.1 ต้นทุนรวมต่อปีเปรียบเทียบ (THB)</h3>
-                <div class="chart-container">
-                    <canvas id="tcoChart"></canvas>
-                </div>
-            </div>
+            <!-- Header & Executive Summary -->
+            <header class="bg-blue-900 text-white p-8 md:p-12 shadow-2xl mb-8">
+                <h1 class="text-3xl md:text-4xl font-extrabold mb-2">รายงานวิเคราะห์การลงทุน: รถโม่ปูนใหม่ 1 คัน</h1>
+                <p class="text-lg opacity-80">เปรียบเทียบต้นทุนรวมต่อปี (TCO) สำหรับปริมาณงาน 3,852.67 คิว (ต่อคัน)</p>
+            </header>
 
-            <!-- Chart 2: Cost Breakdown -->
-            <div class="card">
-                <h3 class="text-xl font-semibold mb-4">1.2 โครงสร้างต้นทุน TCO (Stacked Analysis)</h3>
-                <div class="chart-container">
-                    <canvas id="breakdownChart"></canvas>
-                </div>
-            </div>
-            
-             <!-- Key Financial Metrics Table -->
-            <div class="col-span-1 md:col-span-2 card p-4">
-                <h3 class="text-xl font-semibold mb-3">1.3 ตารางสรุปตัวเลขทางการเงิน (1 ปี)</h3>
-                <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ตัวเลือก</th>
-                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">ราคาซื้อ (บาท)</th>
-                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">ค่าน้ำมันรวม (บาท)</th>
-                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">ค่าซ่อมบำรุง (บาท)</th>
-                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">TCO (บาท)</th>
-                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">ต้นทุน/คิว (บาท/Q)</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">รถ 10 ล้อ (5Q)</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-right">3,000,000</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-right">4,577,157</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-right">120,000</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-semibold">7,697,157</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-right">1,997.88</td>
-                            </tr>
-                            <tr class="bg-emerald-50">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-emerald-800">รถ 6 ล้อ (4Q - Max)</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-medium">1,600,000</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-medium">4,258,478</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-medium">109,200</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-extrabold text-emerald-800">5,967,678</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-extrabold text-emerald-800">1,548.97</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">รถ 6 ล้อ (3Q - Proper)</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-right">1,600,000</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-right">5,671,329</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-right">84,000</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-semibold">7,355,329</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-right">1,909.13</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            
-            <!-- New Section: Actual Trip Distribution -->
-            <div class="col-span-1 md:col-span-2 card p-4">
-                <h3 class="text-xl font-semibold mb-3">1.4 การกระจายตัวของปริมาณงานจริง (เดือน ต.ค. 2568)</h3>
-                <p class="text-sm text-gray-700 mb-4">ข้อมูลนี้แสดงให้เห็นว่างานส่วนใหญ่ (73.5%) สามารถรองรับได้ด้วยรถโม่ปูน 4 คิวขึ้นไป ซึ่งสนับสนุนกลยุทธ์การจัดซื้อรถ 6 ล้อ (4Q) ที่เน้นความคุ้มค่า</p>
-                <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ประเภทเที่ยววิ่ง (ตามปริมาณ)</th>
-                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">จำนวนเที่ยว (ครั้ง)</th>
-                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">สัดส่วน (%)</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">การรองรับรถ 6 ล้อ (4Q)</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">ปริมาณ >= 4 Q</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-semibold">477</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-semibold text-emerald-600">73.5%</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">รองรับได้ที่ความจุสูงสุด 4Q (หรือใกล้เคียง 100% ถ้าไม่รวม 5Q)</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">ปริมาณ &lt; 4 Q</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-semibold">172</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-semibold">26.5%</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">รองรับได้เต็มที่ (3Q, 2Q, ฯลฯ)</td>
-                            </tr>
-                            <tr class="bg-gray-50">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">รวมทั้งหมด</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-extrabold">649</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-extrabold">100%</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-        </section>
-
-        <!-- Operational Analysis Section -->
-        <section class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            <div class="col-span-1 md:col-span-2">
-                <h2 class="text-2xl font-bold text-blue-900 mb-4 border-b pb-2">2. การวิเคราะห์ประสิทธิภาพการดำเนินงาน</h2>
-                <p class="text-gray-700">แม้ว่ารถ 6 ล้อ (4Q) จะต้องวิ่งเที่ยวที่มากกว่า แต่ประสิทธิภาพน้ำมันที่สูงกว่าและต้นทุนการซื้อที่ต่ำกว่าคือปัจจัยหลักที่ทำให้เกิดความคุ้มทุน</p>
-            </div>
-
-            <!-- Operational Metrics -->
-            <div class="card col-span-1">
-                <h3 class="text-xl font-semibold mb-4">2.1 ความแตกต่างด้านการใช้งาน</h3>
-                <div class="space-y-4">
-                    <div class="stat-box">
-                        <p class="text-gray-500 text-sm">จำนวนเที่ยววิ่งต่อปี</p>
-                        <div class="flex justify-between items-center mt-1">
-                            <span class="text-lg font-medium text-red-500">10 ล้อ: 771 เที่ยว</span>
-                            <span class="text-lg font-bold text-emerald-600">6 ล้อ (4Q): 964 เที่ยว</span>
+            <!-- Executive Verdict -->
+            <section class="mb-8">
+                <div class="card border-l-8 border-emerald-500 p-6 md:p-8">
+                    <h2 class="text-2xl font-bold text-gray-700 uppercase tracking-wider mb-3">สรุปผลการตัดสินใจ (Executive Verdict)</h2>
+                    <div class="flex flex-col md:flex-row items-center justify-between">
+                        <div class="mb-4 md:mb-0">
+                            <h3 class="text-4xl font-extrabold text-emerald-600 mb-2">รถ 6 ล้อ คุ้มค่าที่สุด</h3>
+                            <p class="text-xl text-gray-700">
+                                แนะนำให้จัดซื้อ <strong>รถ 6 ล้อ</strong> และบริหารจัดการให้บรรทุก <strong>4 คิว/เที่ยว</strong>
+                            </p>
                         </div>
-                        <p class="text-xs text-gray-500 mt-1">6 ล้อต้องวิ่งมากกว่า 25%</p>
-                    </div>
-                    <div class="stat-box">
-                        <p class="text-gray-500 text-sm">อัตราสิ้นเปลืองน้ำมัน</p>
-                        <div class="flex justify-between items-center mt-1">
-                            <span class="text-lg font-medium text-red-500">10 ล้อ: 2.6 กม./ลิตร</span>
-                            <span class="text-lg font-bold text-emerald-600">6 ล้อ (4Q): 3.5 กม./ลิตร</span>
+                        <div class="text-center bg-emerald-50 rounded-xl p-4 shadow-md">
+                            <p class="text-gray-600 text-sm mb-1">ส่วนต่างประหยัดต้นทุนรวม (เทียบกับ 10 ล้อ)</p>
+                            <p class="text-4xl font-extrabold text-emerald-600">1.73 ลบ.</p>
+                            <p class="text-gray-500 text-sm mt-1">ต่อปี</p>
                         </div>
-                        <p class="text-xs text-gray-500 mt-1">6 ล้อประหยัดน้ำมันกว่า 34.6%</p>
                     </div>
-                    <div class="stat-box">
-                        <p class="text-gray-500 text-sm">ต้นทุนบำรุงรักษาต่อปี</p>
-                        <div class="flex justify-between items-center mt-1">
-                            <span class="text-lg font-medium text-red-500">10 ล้อ: 120,000 บาท</span>
-                            <span class="text-lg font-bold text-emerald-600">6 ล้อ (4Q): 109,200 บาท</span>
+                </div>
+            </section>
+
+            <!-- Financial Analysis Section -->
+            <section class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div class="col-span-1 md:col-span-2">
+                    <h2 class="text-2xl font-bold text-blue-900 mb-4 border-b pb-2">1. การวิเคราะห์ต้นทุนรวมต่อปี (TCO)</h2>
+                    <p class="text-gray-700">
+                        การวิเคราะห์นี้แสดงให้เห็นว่าต้นทุนเริ่มต้นที่ต่ำกว่าของรถ 6 ล้อ สามารถหักล้างต้นทุนน้ำมันเชื้อเพลิง
+                        และค่าบำรุงรักษาที่เพิ่มขึ้นจากการวิ่งเที่ยวที่มากกว่าได้อย่างสมบูรณ์
+                    </p>
+                </div>
+                
+                <!-- Chart 1: TCO Comparison -->
+                <div class="card">
+                    <h3 class="text-xl font-semibold mb-4">1.1 ต้นทุนรวมต่อปีเปรียบเทียบ (THB)</h3>
+                    <div class="chart-container">
+                        <canvas id="tcoChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Chart 2: Cost Breakdown -->
+                <div class="card">
+                    <h3 class="text-xl font-semibold mb-4">1.2 โครงสร้างต้นทุน TCO (Stacked Analysis)</h3>
+                    <div class="chart-container">
+                        <canvas id="breakdownChart"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Key Financial Metrics Table -->
+                <div class="col-span-1 md:col-span-2 card p-4">
+                    <h3 class="text-xl font-semibold mb-3">1.3 ตารางสรุปตัวเลขทางการเงิน (1 ปี)</h3>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ตัวเลือก</th>
+                                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">ราคาซื้อ (บาท)</th>
+                                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">ค่าน้ำมันรวม (บาท)</th>
+                                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">ค่าซ่อมบำรุง (บาท)</th>
+                                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">TCO (บาท)</th>
+                                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">ต้นทุน/คิว (บาท/Q)</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">รถ 10 ล้อ (5Q)</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-right">3,000,000</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-right">4,577,157</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-right">120,000</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-semibold">7,697,157</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-right">1,997.88</td>
+                                </tr>
+                                <tr class="bg-emerald-50">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-emerald-800">รถ 6 ล้อ (4Q - Max)</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-medium">1,600,000</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-medium">4,258,478</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-medium">109,200</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-extrabold text-emerald-800">5,967,678</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-extrabold text-emerald-800">1,548.97</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">รถ 6 ล้อ (3Q - Proper)</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-right">1,600,000</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-right">5,671,329</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-right">84,000</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-semibold">7,355,329</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-right">1,909.13</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Actual Trip Distribution -->
+                <div class="col-span-1 md:col-span-2 card p-4">
+                    <h3 class="text-xl font-semibold mb-3">1.4 การกระจายตัวของปริมาณงานจริง (เดือน ต.ค. 2568)</h3>
+                    <p class="text-sm text-gray-700 mb-4">
+                        ข้อมูลนี้แสดงให้เห็นว่างานส่วนใหญ่ (73.5%) สามารถรองรับได้ด้วยรถโม่ปูน 4 คิวขึ้นไป
+                        ซึ่งสนับสนุนกลยุทธ์การจัดซื้อรถ 6 ล้อ (4Q) ที่เน้นความคุ้มค่า
+                    </p>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ประเภทเที่ยววิ่ง (ตามปริมาณ)</th>
+                                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">จำนวนเที่ยว (ครั้ง)</th>
+                                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">สัดส่วน (%)</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">การรองรับรถ 6 ล้อ (4Q)</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">ปริมาณ &gt;= 4 Q</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-semibold">477</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-semibold text-emerald-600">73.5%</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">รองรับได้ที่ความจุสูงสุด 4Q (หรือใกล้เคียง 100% ถ้าไม่รวม 5Q)</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">ปริมาณ &lt; 4 Q</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-semibold">172</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-semibold">26.5%</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">รองรับได้เต็มที่ (3Q, 2Q, ฯลฯ)</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">รวมทั้งหมด</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-extrabold">649</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-extrabold">100%</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </section>
+        </div>
+        <!-- ============ END PAGE 1 ============ -->
+
+        <!-- ============ PAGE 2 ============ -->
+        <div id="pdf-page-2">
+
+            <!-- Operational Analysis Section -->
+            <section class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div class="col-span-1 md:col-span-2">
+                    <h2 class="text-2xl font-bold text-blue-900 mb-4 border-b pb-2">2. การวิเคราะห์ประสิทธิภาพการดำเนินงาน</h2>
+                    <p class="text-gray-700">
+                        แม้ว่ารถ 6 ล้อ (4Q) จะต้องวิ่งเที่ยวที่มากกว่า
+                        แต่ประสิทธิภาพน้ำมันที่สูงกว่าและต้นทุนการซื้อที่ต่ำกว่าคือปัจจัยหลักที่ทำให้เกิดความคุ้มทุน
+                    </p>
+                </div>
+
+                <!-- Operational Metrics -->
+                <div class="card col-span-1">
+                    <h3 class="text-xl font-semibold mb-4">2.1 ความแตกต่างด้านการใช้งาน</h3>
+                    <div class="space-y-4">
+                        <div class="stat-box">
+                            <p class="text-gray-500 text-sm">จำนวนเที่ยววิ่งต่อปี</p>
+                            <div class="flex justify-between items-center mt-1">
+                                <span class="text-lg font-medium text-red-500">10 ล้อ: 771 เที่ยว</span>
+                                <span class="text-lg font-bold text-emerald-600">6 ล้อ (4Q): 964 เที่ยว</span>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-1">6 ล้อต้องวิ่งมากกว่า 25%</p>
                         </div>
-                        <p class="text-xs text-gray-500 mt-1">6 ล้อแม้บรรทุกหนัก แต่มีค่าซ่อมบำรุงต่ำกว่า</p>
+                        <div class="stat-box">
+                            <p class="text-gray-500 text-sm">อัตราสิ้นเปลืองน้ำมัน</p>
+                            <div class="flex justify-between items-center mt-1">
+                                <span class="text-lg font-medium text-red-500">10 ล้อ: 2.6 กม./ลิตร</span>
+                                <span class="text-lg font-bold text-emerald-600">6 ล้อ (4Q): 3.5 กม./ลิตร</span>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-1">6 ล้อประหยัดน้ำมันกว่า 34.6%</p>
+                        </div>
+                        <div class="stat-box">
+                            <p class="text-gray-500 text-sm">ต้นทุนบำรุงรักษาต่อปี</p>
+                            <div class="flex justify-between items-center mt-1">
+                                <span class="text-lg font-medium text-red-500">10 ล้อ: 120,000 บาท</span>
+                                <span class="text-lg font-bold text-emerald-600">6 ล้อ (4Q): 109,200 บาท</span>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-1">6 ล้อแม้บรรทุกหนัก แต่มีค่าซ่อมบำรุงต่ำกว่า</p>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Chart 3: Initial Investment Comparison (Doughnut) -->
-            <div class="card col-span-1">
-                <h3 class="text-xl font-semibold mb-4">2.2 การเปรียบเทียบเงินลงทุนเริ่มต้น</h3>
-                <p class="text-sm text-gray-500 mb-6">ความแตกต่างของราคารถซื้อคือปัจจัยที่ส่งผลต่อ TCO มากที่สุด</p>
-                <div class="chart-container" style="height: 300px;">
-                    <canvas id="investmentChart"></canvas>
+                <!-- Chart 3: Initial Investment Comparison (Doughnut) -->
+                <div class="card col-span-1">
+                    <h3 class="text-xl font-semibold mb-4">2.2 การเปรียบเทียบเงินลงทุนเริ่มต้น</h3>
+                    <p class="text-sm text-gray-500 mb-6">ความแตกต่างของราคารถซื้อคือปัจจัยที่ส่งผลต่อ TCO มากที่สุด</p>
+                    <div class="chart-container" style="height: 300px;">
+                        <canvas id="investmentChart"></canvas>
+                    </div>
                 </div>
-            </div>
 
-        </section>
+            </section>
 
-        <!-- Strategic Recommendation Section -->
-        <section class="mb-8">
-            <h2 class="text-2xl font-bold text-blue-900 mb-4 border-b pb-2">3. ข้อเสนอแนะเชิงกลยุทธ์</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="card bg-indigo-50 border-t-4 border-indigo-500">
-                    <h3 class="font-bold text-xl text-indigo-700 mb-2">3.1 กลยุทธ์การบรรทุก</h3>
-                    <p class="text-sm text-gray-700">กำหนดให้รถ 6 ล้อใหม่ บรรทุกที่ 4 คิว/เที่ยว ตลอดเวลา แม้ว่าจะมีค่าซ่อมบำรุงเพิ่มขึ้น 30% แต่ความคุ้มค่าด้านน้ำมันเชื้อเพลิงยังคงครอบคลุมต้นทุนที่เพิ่มขึ้น</p>
+            <!-- Strategic Recommendation Section -->
+            <section class="mb-8">
+                <h2 class="text-2xl font-bold text-blue-900 mb-4 border-b pb-2">3. ข้อเสนอแนะเชิงกลยุทธ์</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="card bg-indigo-50 border-t-4 border-indigo-500">
+                        <h3 class="font-bold text-xl text-indigo-700 mb-2">3.1 กลยุทธ์การบรรทุก</h3>
+                        <p class="text-sm text-gray-700">
+                            กำหนดให้รถ 6 ล้อใหม่ บรรทุกที่ 4 คิว/เที่ยว ตลอดเวลา แม้ว่าจะมีค่าซ่อมบำรุงเพิ่มขึ้น 30%
+                            แต่ความคุ้มค่าด้านน้ำมันเชื้อเพลิงยังคงครอบคลุมต้นทุนที่เพิ่มขึ้น
+                        </p>
+                    </div>
+                    <div class="card bg-indigo-50 border-t-4 border-indigo-500">
+                        <h3 class="font-bold text-xl text-indigo-700 mb-2">3.2 การจัดการงาน (Fleet Management)</h3>
+                        <p class="text-sm text-gray-700">
+                            ใช้รถ 10 ล้อเดิม (5 คัน) เพื่อรองรับงานขนาด 5 คิว โดยเฉพาะ
+                            และใช้รถ 6 ล้อใหม่และเดิม (รวม 4 คัน) รองรับงาน 4 คิว หรือต่ำกว่า
+                            เพื่อให้ใช้ความจุรถได้เต็มประสิทธิภาพสูงสุด
+                        </p>
+                    </div>
+                    <div class="card bg-indigo-50 border-t-4 border-indigo-500">
+                        <h3 class="font-bold text-xl text-indigo-700 mb-2">3.3 การควบคุมค่าซ่อม</h3>
+                        <p class="text-sm text-gray-700">
+                            เนื่องจากการบรรทุก 4 คิว อาจทำให้รถทำงานหนัก
+                            ควรมีโปรแกรมบำรุงรักษาเชิงป้องกัน (Preventive Maintenance)
+                            ที่เข้มงวดเป็นพิเศษ เพื่อควบคุมค่าซ่อมแซมให้อยู่ในงบ 109,200 บาท/ปี
+                        </p>
+                    </div>
                 </div>
-                <div class="card bg-indigo-50 border-t-4 border-indigo-500">
-                    <h3 class="font-bold text-xl text-indigo-700 mb-2">3.2 การจัดการงาน (Fleet Management)</h3>
-                    <p class="text-sm text-gray-700">ใช้รถ 10 ล้อเดิม (5 คัน) เพื่อรองรับงานขนาด 5 คิว โดยเฉพาะ และใช้รถ 6 ล้อใหม่และเดิม (รวม 4 คัน) รองรับงาน 4 คิว หรือต่ำกว่า เพื่อให้ใช้ความจุรถได้เต็มประสิทธิภาพสูงสุด</p>
-                </div>
-                 <div class="card bg-indigo-50 border-t-4 border-indigo-500">
-                    <h3 class="font-bold text-xl text-indigo-700 mb-2">3.3 การควบคุมค่าซ่อม</h3>
-                    <p class="text-sm text-gray-700">เนื่องจากการบรรทุก 4 คิว อาจทำให้รถทำงานหนัก ควรมีโปรแกรมบำรุงรักษาเชิงป้องกัน (Preventive Maintenance) ที่เข้มงวดเป็นพิเศษ เพื่อควบคุมค่าซ่อมแซมให้อยู่ในงบ 109,200 บาท/ปี</p>
-                </div>
-            </div>
-        </section>
+            </section>
+
+            <footer class="bg-gray-800 text-gray-400 py-6 text-center text-sm">
+                <p>รายงานนี้จัดทำขึ้นเพื่อประกอบการตัดสินใจของผู้บริหาร โดยอ้างอิงข้อมูลการดำเนินงานจริงเดือน ต.ค. 2568</p>
+            </footer>
+
+        </div>
+        <!-- ============ END PAGE 2 ============ -->
 
     </main>
 
-    <footer class="bg-gray-800 text-gray-400 py-6 text-center text-sm">
-        <p>รายงานนี้จัดทำขึ้นเพื่อประกอบการตัดสินใจของผู้บริหาร โดยอ้างอิงข้อมูลการดำเนินงานจริงเดือน ต.ค. 2568</p>
-    </footer>
-
     <script>
-        // --- 1. Data Preparation (Calculated from 1/9 of total fleet volume: 3,852.67 Q/yr) ---
+        // --- 1. Data Preparation ---
         const labels = ['รถ 10 ล้อ (5Q)', 'รถ 6 ล้อ (3Q)', 'รถ 6 ล้อ (4Q - คุ้มค่าสุด)'];
         
-        // Cost (THB)
-        const costTotal = [7697157, 7355329, 5967678];
+        const costTotal     = [7697157, 7355329, 5967678];
         const priceVehicles = [3000000, 1600000, 1600000];
-        const costMaint = [120000, 84000, 109200];
-        const costFuel = [4577157, 5671329, 4258478]; // Recalculated fuel: TCO - Purchase - Maint
-
-        // --- 2. Chart.js Configuration Utilities ---
+        const costMaint     = [120000,  84000,   109200];
+        const costFuel      = [4577157, 5671329, 4258478];
 
         Chart.defaults.font.family = "'Sarabun', sans-serif";
         Chart.defaults.color = '#4B5563';
 
-        // Label Wrapping Logic (Mandatory)
         function formatLabel(label) {
             const maxChars = 16;
             if (label.length <= maxChars) return label;
-            
             const words = label.split(' ');
             const lines = [];
-            let currentLine = words[0];
+            let current = words[0];
 
             for (let i = 1; i < words.length; i++) {
-                if (currentLine.length + 1 + words[i].length <= maxChars) {
-                    currentLine += ' ' + words[i];
+                if (current.length + 1 + words[i].length <= maxChars) {
+                    current += ' ' + words[i];
                 } else {
-                    lines.push(currentLine);
-                    currentLine = words[i];
+                    lines.push(current);
+                    current = words[i];
                 }
             }
-            lines.push(currentLine);
+            lines.push(current);
             return lines;
         }
 
         const processedLabels = labels.map(formatLabel);
 
-        // Tooltip Callback Configuration (Mandatory)
         const tooltipConfig = {
             callbacks: {
                 title: function(tooltipItems) {
                     const item = tooltipItems[0];
-                    let label = item.chart.data.labels[item.dataIndex];
-                    if (Array.isArray(label)) {
-                        return label.join(' ');
-                    } else {
-                        return label;
-                    }
+                    const label = item.chart.data.labels[item.dataIndex];
+                    return Array.isArray(label) ? label.join(' ') : label;
                 },
                 label: function(context) {
-                    let label = context.dataset.label || '';
-                    if (label) {
-                        label += ': ';
-                    }
-                    if (context.parsed.y !== null) {
-                        let value = context.parsed.y;
+                    let label = context.dataset.label ? context.dataset.label + ': ' : '';
+                    if (context.parsed.y != null) {
+                        const value = context.parsed.y;
                         if (value >= 1000000) {
-                             label += (value / 1000000).toFixed(2) + ' ลบ.';
+                            label += (value / 1000000).toFixed(2) + ' ลบ.';
                         } else {
-                             label += new Intl.NumberFormat('th-TH', { style: 'decimal', minimumFractionDigits: 0 }).format(value) + ' บาท';
+                            label += new Intl.NumberFormat('th-TH', {
+                                style: 'decimal',
+                                minimumFractionDigits: 0
+                            }).format(value) + ' บาท';
                         }
                     }
                     return label;
                 }
             }
         };
-        
-        // --- 3. Chart Implementations ---
 
-        // Chart 1: TCO Comparison (Bar Chart)
+        // Chart 1: TCO Comparison
         const ctxTCO = document.getElementById('tcoChart').getContext('2d');
         new Chart(ctxTCO, {
             type: 'bar',
@@ -364,9 +378,9 @@
                     label: 'ต้นทุนรวมต่อปี',
                     data: costTotal,
                     backgroundColor: [
-                        '#9CA3AF', 
-                        '#D1D5DB', 
-                        '#10B981'  // Highlight Winner
+                        '#9CA3AF',
+                        '#D1D5DB',
+                        '#10B981'
                     ],
                     borderRadius: 8,
                     borderWidth: 0
@@ -377,27 +391,21 @@
                 maintainAspectRatio: false,
                 plugins: {
                     legend: { display: false },
-                    tooltip: tooltipConfig,
-                    title: { display: false }
+                    tooltip: tooltipConfig
                 },
                 scales: {
                     y: {
-                        beginAtZero: false,
                         grid: { color: '#E5E7EB' },
                         ticks: {
-                            callback: function(value) {
-                                return (value / 1000000) + ' ลบ.';
-                            }
+                            callback: value => (value / 1000000) + ' ลบ.'
                         }
                     },
-                    x: {
-                        grid: { display: false }
-                    }
+                    x: { grid: { display: false } }
                 }
             }
         });
 
-        // Chart 2: TCO Breakdown (Stacked Bar)
+        // Chart 2: TCO Breakdown
         const ctxBreakdown = document.getElementById('breakdownChart').getContext('2d');
         new Chart(ctxBreakdown, {
             type: 'bar',
@@ -407,19 +415,19 @@
                     {
                         label: 'ราคารถ (Purchase)',
                         data: priceVehicles,
-                        backgroundColor: '#1E3A8A', // Primary Blue
+                        backgroundColor: '#1E3A8A',
                         stack: 'Stack 0',
                     },
                     {
                         label: 'ค่าซ่อมบำรุง (Maint)',
                         data: costMaint,
-                        backgroundColor: '#8B5CF6', // Violet
+                        backgroundColor: '#8B5CF6',
                         stack: 'Stack 0',
                     },
                     {
                         label: 'ค่าน้ำมัน (Fuel)',
                         data: costFuel,
-                        backgroundColor: '#F59E0B', // Amber
+                        backgroundColor: '#F59E0B',
                         stack: 'Stack 0',
                     }
                 ]
@@ -436,20 +444,15 @@
                         stacked: true,
                         grid: { color: '#E5E7EB' },
                         ticks: {
-                            callback: function(value) {
-                                return (value / 1000000) + ' ลบ.';
-                            }
+                            callback: value => (value / 1000000) + ' ลบ.'
                         }
                     },
-                    x: {
-                        stacked: true,
-                        grid: { display: false }
-                    }
+                    x: { stacked: true, grid: { display: false } }
                 }
             }
         });
-        
-        // Chart 3: Initial Investment Comparison (Doughnut)
+
+        // Chart 3: Investment Comparison
         const ctxInvestment = document.getElementById('investmentChart').getContext('2d');
         new Chart(ctxInvestment, {
             type: 'doughnut',
@@ -458,10 +461,7 @@
                 datasets: [{
                     label: 'ราคารถ',
                     data: [3000000, 1600000],
-                    backgroundColor: [
-                        '#3B82F6', // Blue for 10L
-                        '#10B981'  // Emerald for 6L
-                    ],
+                    backgroundColor: ['#3B82F6', '#10B981'],
                     hoverOffset: 10
                 }]
             },
@@ -472,12 +472,10 @@
                 plugins: {
                     legend: { position: 'right' },
                     tooltip: {
-                         callbacks: {
-                            title: function(tooltipItems) {
-                                return tooltipItems[0].label;
-                            },
+                        callbacks: {
+                            title: items => items[0].label,
                             label: function(context) {
-                                const total = context.chart._metasets[0].total;
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
                                 const value = context.parsed;
                                 const percentage = ((value / total) * 100).toFixed(1) + '%';
                                 return context.label + ': ' + percentage;
@@ -488,51 +486,49 @@
             }
         });
 
-        // --- 4. Export PDF Function ---
+        // -------- Export PDF : 2 หน้าพอดี ไม่ตัด ----------
         async function exportPDF() {
-            const { jsPDF } = window.jspdf || window.jspdf || {};
-            if (!jsPDF) {
+            const jspdf = window.jspdf;
+            if (!jspdf) {
                 alert('ไม่สามารถโหลด jsPDF ได้ กรุณาเชื่อมต่ออินเทอร์เน็ตแล้วลองใหม่อีกครั้ง');
                 return;
             }
-
-            const reportElement = document.getElementById('report-root');
-
-            // เลื่อนหน้าไปบนสุดก่อนกัน chart/canvas เบี้ยว
-            window.scrollTo(0, 0);
-
-            const canvas = await html2canvas(reportElement, {
-                scale: 2,
-                useCORS: true,
-                windowWidth: document.documentElement.scrollWidth,
-                windowHeight: document.documentElement.scrollHeight
-            });
-
-            const imgData = canvas.toDataURL('image/png');
-            const pdf = new jsPDF('l', 'mm', 'a4');
-
+            const { jsPDF } = jspdf;
+            const pdf = new jsPDF('p', 'mm', 'a4');
             const pdfWidth = pdf.internal.pageSize.getWidth();
             const pdfHeight = pdf.internal.pageSize.getHeight();
 
-            const imgWidth = pdfWidth;
-            const imgHeight = canvas.height * pdfWidth / canvas.width;
+            async function addSectionToPDF(element, isFirstPage) {
+                const canvas = await html2canvas(element, {
+                    scale: 2,
+                    useCORS: true,
+                    windowWidth: element.scrollWidth,
+                    windowHeight: element.scrollHeight
+                });
 
-            let heightLeft = imgHeight;
-            let position = 0;
+                const imgData = canvas.toDataURL('image/png');
+                const imgW = canvas.width;
+                const imgH = canvas.height;
 
-            pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-            heightLeft -= pdfHeight;
+                // คำนวณ scale ให้ภาพ “พอดี A4” ทั้งกว้างและสูง
+                const ratio = Math.min(pdfWidth / imgW, pdfHeight / imgH);
+                const imgWidth = imgW * ratio;
+                const imgHeight = imgH * ratio;
+                const x = (pdfWidth - imgWidth) / 2;
+                const y = 0;  // ชิดบน
 
-            while (heightLeft > 0) {
-                position = heightLeft - imgHeight;
-                pdf.addPage();
-                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-                heightLeft -= pdfHeight;
+                if (!isFirstPage) pdf.addPage();
+                pdf.addImage(imgData, 'PNG', x, y, imgWidth, imgHeight);
             }
+
+            const page1 = document.getElementById('pdf-page-1');
+            const page2 = document.getElementById('pdf-page-2');
+
+            await addSectionToPDF(page1, true);   // หน้า 1
+            await addSectionToPDF(page2, false);  // หน้า 2
 
             pdf.save('truck-mixer-investment-report.pdf');
         }
     </script>
-    <!-- NO SVG Graphics used. NO Mermaid JS used. -->
 </body>
 </html>
