@@ -173,13 +173,13 @@
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
                             <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">ปริมาณ $\mathbf{\ge 4 \text{ Q}}$</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">ปริมาณ >= 4 Q</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-semibold">477</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-semibold text-emerald-600">73.5%</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">รองรับได้ที่ความจุสูงสุด 4Q (หรือใกล้เคียง 100% ถ้าไม่รวม 5Q)</td>
                             </tr>
                             <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">ปริมาณ $\mathbf{< 4 \text{ Q}}$</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">ปริมาณ &lt; 4 Q</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-semibold">172</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-semibold">26.5%</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">รองรับได้เต็มที่ (3Q, 2Q, ฯลฯ)</td>
@@ -252,15 +252,15 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div class="card bg-indigo-50 border-t-4 border-indigo-500">
                     <h3 class="font-bold text-xl text-indigo-700 mb-2">3.1 กลยุทธ์การบรรทุก</h3>
-                    <p class="text-sm text-gray-700">กำหนดให้รถ 6 ล้อใหม่ บรรทุกที่ $\mathbf{4 \text{ Q}/\text{เที่ยว}}$ ตลอดเวลา แม้ว่าจะมีค่าซ่อมบำรุงเพิ่มขึ้น $30\%$ แต่ความคุ้มค่าด้านน้ำมันเชื้อเพลิงยังคงครอบคลุมต้นทุนที่เพิ่มขึ้น</p>
+                    <p class="text-sm text-gray-700">กำหนดให้รถ 6 ล้อใหม่ บรรทุกที่ 4 คิว/เที่ยว ตลอดเวลา แม้ว่าจะมีค่าซ่อมบำรุงเพิ่มขึ้น 30% แต่ความคุ้มค่าด้านน้ำมันเชื้อเพลิงยังคงครอบคลุมต้นทุนที่เพิ่มขึ้น</p>
                 </div>
                 <div class="card bg-indigo-50 border-t-4 border-indigo-500">
                     <h3 class="font-bold text-xl text-indigo-700 mb-2">3.2 การจัดการงาน (Fleet Management)</h3>
-                    <p class="text-sm text-gray-700">ใช้รถ 10 ล้อเดิม (5 คัน) เพื่อรองรับงานขนาด $5 \text{ Q}$ โดยเฉพาะ และใช้รถ 6 ล้อใหม่และเดิม (รวม 4 คัน) รองรับงาน $4 \text{ Q}$ หรือต่ำกว่า เพื่อให้ใช้ความจุรถได้เต็มประสิทธิภาพสูงสุด</p>
+                    <p class="text-sm text-gray-700">ใช้รถ 10 ล้อเดิม (5 คัน) เพื่อรองรับงานขนาด 5 คิว โดยเฉพาะ และใช้รถ 6 ล้อใหม่และเดิม (รวม 4 คัน) รองรับงาน 4 คิว หรือต่ำกว่า เพื่อให้ใช้ความจุรถได้เต็มประสิทธิภาพสูงสุด</p>
                 </div>
                  <div class="card bg-indigo-50 border-t-4 border-indigo-500">
                     <h3 class="font-bold text-xl text-indigo-700 mb-2">3.3 การควบคุมค่าซ่อม</h3>
-                    <p class="text-sm text-gray-700">เนื่องจากการบรรทุก $4 \text{ Q}$ อาจทำให้รถทำงานหนัก ควรมีโปรแกรมบำรุงรักษาเชิงป้องกัน (Preventive Maintenance) ที่เข้มงวดเป็นพิเศษ เพื่อควบคุมค่าซ่อมแซมให้อยู่ในงบ $109,200 \text{ บาท}/\text{ปี}$</p>
+                    <p class="text-sm text-gray-700">เนื่องจากการบรรทุก 4 คิว อาจทำให้รถทำงานหนัก ควรมีโปรแกรมบำรุงรักษาเชิงป้องกัน (Preventive Maintenance) ที่เข้มงวดเป็นพิเศษ เพื่อควบคุมค่าซ่อมแซมให้อยู่ในงบ 109,200 บาท/ปี</p>
                 </div>
             </div>
         </section>
@@ -272,16 +272,14 @@
     </footer>
 
     <script>
-        // --- 1. Data Preparation (From Truck_Summary_Comparison_V2.md) ---
-        // V_Annual_Truck = 3,852.67 Q
-        
+        // --- 1. Data Preparation (Calculated from 1/9 of total fleet volume: 3,852.67 Q/yr) ---
         const labels = ['รถ 10 ล้อ (5Q)', 'รถ 6 ล้อ (3Q)', 'รถ 6 ล้อ (4Q - คุ้มค่าสุด)'];
         
         // Cost (THB)
         const costTotal = [7697157, 7355329, 5967678];
         const priceVehicles = [3000000, 1600000, 1600000];
         const costMaint = [120000, 84000, 109200];
-        const costFuel = [4577157, 5671329, 4258478]; // Recalculated fuel for 3Q: 7355329 - 1600000 - 84000 = 5671329
+        const costFuel = [4577157, 5671329, 4258478]; // Recalculated fuel: TCO - Purchase - Maint
 
         // --- 2. Chart.js Configuration Utilities ---
 
